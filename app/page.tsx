@@ -29,9 +29,10 @@ type AppState = 'login' | 'loading' | 'triage' | 'empty'
 function buildOAuthUrl() {
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: window.location.origin,
-    response_type: 'token',
+    redirect_uri: `${window.location.origin}/api/auth/callback`,
+    response_type: 'code',
     scope: SCOPES,
+    access_type: 'online',
     prompt: 'select_account',
   })
   return `https://accounts.google.com/o/oauth2/v2/auth?${params}`
