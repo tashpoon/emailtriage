@@ -51,6 +51,7 @@ export default function Home() {
   const [showTodo, setShowTodo] = useState(false)
   const [undoAction, setUndoAction] = useState<UndoAction | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [googleReady, setGoogleReady] = useState(false)
   const { todos, staleCount, addTodo, removeTodo, toggleTodo } = useTodo()
 
   // Register service worker
@@ -60,17 +61,27 @@ export default function Home() {
     }
   }, [])
 
-  // Load Google Identity Services script
+  // Load Google Identity Services script and wait for it to be ready
   useEffect(() => {
-    if (document.querySelector('script[src*="accounts.google.com"]')) return
-    const script = document.createElement('script')
-    script.src = 'https://accounts.google.com/gsi/client'
-    script.async = true
-    document.head.appendChild(script)
+    if (window.google) { setGoogleReady(true); return }
+    const existing = document.querySelector('script[src*="accounts.google.com"]')
+    const script = (existing as HTMLScriptElement) ?? document.createElement('script')
+    if (!existing) {
+      script.src = 'https://accounts.google.com/gsi/client'
+      script.async = true
+      document.head.appendChild(script)
+    }
+    script.addEventListener('load', () => setGoogleReady(true))
+    // Fallback poll in case load event already fired
+    const interval = setInterval(() => {
+      if (window.google) { setGoogleReady(true); clearInterval(interval) }
+    }, 200)
+    return () => clearInterval(interval)
   }, [])
 
   const signIn = useCallback(() => {
-    const client = window.google?.accounts.oauth2.initTokenClient({
+    if (!window.google) { setLoadError('Google sign-in not loaded yet, please wait a moment and try again.'); return }
+    const client = window.google.accounts.oauth2.initTokenClient({
       client_id: GOOGLE_CLIENT_ID,
       scope: SCOPES,
       callback: async (response) => {
@@ -246,7 +257,8 @@ export default function Home() {
         )}
         <button
           onClick={signIn}
-          className="flex items-center gap-3 bg-white text-slate-900 font-semibold px-6 py-3 rounded-2xl shadow-lg hover:bg-slate-100 active:scale-95 transition-all"
+          disabled={!googleReady}
+          className="flex items-center gap-3 bg-white text-slate-900 font-semibold px-6 py-3 rounded-2xl shadow-lg hover:bg-slate-100 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-wait"
         >
           <svg width="20" height="20" viewBox="0 0 48 48" className="shrink-0">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
