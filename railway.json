@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "node_modules/.bin/next start -p $PORT",
+    "startCommand": "node_modules/.bin/next start -p 3000",
     "healthcheckPath": "/",
     "healthcheckTimeout": 60,
     "restartPolicyType": "ON_FAILURE"
