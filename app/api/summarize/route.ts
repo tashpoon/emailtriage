@@ -20,11 +20,11 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
-        max_tokens: 60,
+        max_tokens: 150,
         messages: [
           {
             role: 'user',
-            content: `Summarize this email in one sentence (max 15 words). Be specific and direct — no filler.\n\nFrom: ${from}\nSubject: ${subject}\nPreview: ${snippet}`,
+            content: `Summarize this email in 2-3 sentences. Be specific about what it contains, any action required, and key details like dates, amounts, or deadlines. No filler phrases.\n\nFrom: ${from}\nSubject: ${subject}\nPreview: ${snippet}`,
           },
         ],
       }),
