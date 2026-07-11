@@ -161,9 +161,24 @@ export function SwipeCard({ email, onSwipe, onSkip, isTop }: Props) {
           )}
         </div>
 
+        {/* Unsubscribe button */}
+        {isTop && email.unsubscribeUrl && (
+          <div className="mt-4">
+            <a
+              href={email.unsubscribeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full flex items-center justify-center gap-2 text-orange-400 text-xs border border-orange-400/30 rounded-xl py-2 hover:bg-orange-400/10 transition-colors"
+            >
+              🚫 Unsubscribe
+            </a>
+          </div>
+        )}
+
         {/* Swipe hint + skip button */}
         {isTop && (
-          <div className="mt-4">
+          <div className="mt-3">
             <div className="flex justify-center gap-6 text-xs text-slate-600 mb-3">
               <span>← Delete</span>
               <span>↑ Todo</span>

@@ -22,6 +22,16 @@ interface GmailPayload {
   headers?: { name: string; value: string }[]
 }
 
+function parseUnsubscribeUrl(header: string): string | undefined {
+  if (!header) return undefined
+  // Header format: "<https://...>, <mailto:...>" — prefer https URL
+  const httpsMatch = header.match(/<(https?:\/\/[^>]+)>/)
+  if (httpsMatch) return httpsMatch[1]
+  const mailtoMatch = header.match(/<(mailto:[^>]+)>/)
+  if (mailtoMatch) return mailtoMatch[1]
+  return undefined
+}
+
 function detectCategory(labelIds: string[]): Email['category'] {
   if (labelIds.includes('CATEGORY_SOCIAL')) return 'Social'
   if (labelIds.includes('CATEGORY_PROMOTIONS')) return 'Promotions'
@@ -59,7 +69,7 @@ export async function fetchInboxEmails(token: string, maxResults = 100): Promise
     const chunk = ids.slice(i, i + BATCH)
     const results = await Promise.all(
       chunk.map(({ id }) =>
-        gfetch(`/messages/${id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`, token).catch(() => null)
+        gfetch(`/messages/${id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date&metadataHeaders=List-Unsubscribe`, token).catch(() => null)
       )
     )
     for (const msg of results) {
@@ -76,6 +86,7 @@ export async function fetchInboxEmails(token: string, maxResults = 100): Promise
         from: name || email,
         fromEmail: email,
         snippet: msg.snippet ?? '',
+        unsubscribeUrl: parseUnsubscribeUrl(parseHeader(headers, 'List-Unsubscribe')),
         category: detectCategory(labelIds),
         date: new Date(parseInt(msg.internalDate)),
         labelIds,

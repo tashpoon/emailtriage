@@ -6,6 +6,7 @@ export interface Email {
   fromEmail: string
   snippet: string
   summary?: string
+  unsubscribeUrl?: string
   category: 'Primary' | 'Social' | 'Promotions' | 'Updates' | 'Forums' | 'Other'
   date: Date
   labelIds: string[]
