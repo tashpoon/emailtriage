@@ -121,6 +121,10 @@ export default function Home() {
     setEmails((prev) => prev.filter((e) => e.id !== id))
   }, [])
 
+  const handleSkip = useCallback((email: Email) => {
+    setEmails((prev) => [...prev.filter((e) => e.id !== email.id), email])
+  }, [])
+
   const handleSwipe = useCallback(
     async (email: Email, direction: SwipeDirection) => {
       if (!token) return
@@ -289,7 +293,7 @@ export default function Home() {
 
       {/* Card area */}
       <main className="flex-1 relative px-4 pb-safe pb-8 min-h-0">
-        <CardStack emails={emails} onSwipe={handleSwipe} />
+        <CardStack emails={emails} onSwipe={handleSwipe} onSkip={handleSkip} />
       </main>
 
       {/* Label picker */}

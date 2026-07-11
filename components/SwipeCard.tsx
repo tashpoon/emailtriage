@@ -7,6 +7,7 @@ import type { Email, SwipeDirection } from '@/lib/types'
 interface Props {
   email: Email
   onSwipe: (direction: SwipeDirection) => void
+  onSkip: () => void
   isTop: boolean
 }
 
@@ -23,7 +24,7 @@ const CATEGORY_STYLES: Record<string, string> = {
   Other:      'bg-slate-500/20 text-slate-400',
 }
 
-export function SwipeCard({ email, onSwipe, isTop }: Props) {
+export function SwipeCard({ email, onSwipe, onSkip, isTop }: Props) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
 
@@ -160,13 +161,21 @@ export function SwipeCard({ email, onSwipe, isTop }: Props) {
           )}
         </div>
 
-        {/* Swipe hint (only on top card) */}
+        {/* Swipe hint + skip button */}
         {isTop && (
-          <div className="mt-4 flex justify-center gap-6 text-xs text-slate-600">
-            <span>← Delete</span>
-            <span>↑ Todo</span>
-            <span>↓ Label</span>
-            <span>Archive →</span>
+          <div className="mt-4">
+            <div className="flex justify-center gap-6 text-xs text-slate-600 mb-3">
+              <span>← Delete</span>
+              <span>↑ Todo</span>
+              <span>↓ Label</span>
+              <span>Archive →</span>
+            </div>
+            <button
+              onClick={(e) => { e.stopPropagation(); onSkip() }}
+              className="w-full text-center text-slate-500 text-xs py-1.5 rounded-lg hover:text-slate-300 hover:bg-slate-700/50 transition-colors"
+            >
+              Skip for now
+            </button>
           </div>
         )}
       </div>

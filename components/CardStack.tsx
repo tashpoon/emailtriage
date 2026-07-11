@@ -7,9 +7,10 @@ import { SwipeCard } from './SwipeCard'
 interface Props {
   emails: Email[]
   onSwipe: (email: Email, direction: SwipeDirection) => void
+  onSkip: (email: Email) => void
 }
 
-export function CardStack({ emails, onSwipe }: Props) {
+export function CardStack({ emails, onSwipe, onSkip }: Props) {
   const top = emails[0]
   const next = emails[1]
 
@@ -32,6 +33,7 @@ export function CardStack({ emails, onSwipe }: Props) {
             key={next.id}
             email={next}
             onSwipe={() => {}}
+            onSkip={() => {}}
             isTop={false}
           />
         </div>
@@ -52,6 +54,7 @@ export function CardStack({ emails, onSwipe }: Props) {
             <SwipeCard
               email={top}
               onSwipe={(dir) => onSwipe(top, dir)}
+              onSkip={() => onSkip(top)}
               isTop={true}
             />
           </motion.div>
