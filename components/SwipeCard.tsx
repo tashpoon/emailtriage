@@ -145,16 +145,16 @@ export function SwipeCard({ email, onSwipe, isTop }: Props) {
         </div>
 
         {/* Subject */}
-        <h2 className="text-white font-semibold text-lg leading-snug mb-4 line-clamp-3">
+        <h2 className="text-white font-semibold text-lg leading-snug mb-3 line-clamp-2">
           {email.subject}
         </h2>
 
         {/* Summary / snippet */}
-        <div className="mt-auto">
+        <div>
           {email.summary ? (
-            <p className="text-slate-300 text-sm leading-relaxed">{email.summary}</p>
+            <p className="text-slate-300 text-sm leading-relaxed line-clamp-4">{email.summary}</p>
           ) : email.snippet ? (
-            <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">{email.snippet}</p>
+            <p className="text-slate-400 text-sm leading-relaxed line-clamp-4">{email.snippet}</p>
           ) : (
             <p className="text-slate-500 text-sm italic animate-pulse">Loading…</p>
           )}
@@ -162,7 +162,7 @@ export function SwipeCard({ email, onSwipe, isTop }: Props) {
 
         {/* Swipe hint (only on top card) */}
         {isTop && (
-          <div className="mt-6 flex justify-center gap-6 text-xs text-slate-600">
+          <div className="mt-4 flex justify-center gap-6 text-xs text-slate-600">
             <span>← Delete</span>
             <span>↑ Todo</span>
             <span>↓ Label</span>
