@@ -5,8 +5,8 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get('code')
   const error = searchParams.get('error')
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
-  const redirectUri = `${appUrl}/api/auth/callback`
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin
+  const redirectUri = `${appUrl.replace(/\/$/, '')}/api/auth/callback`
 
   if (error || !code) {
     return NextResponse.redirect(new URL(`/?error=${error ?? 'no_code'}`, appUrl))
