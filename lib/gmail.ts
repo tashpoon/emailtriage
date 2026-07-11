@@ -120,10 +120,10 @@ export async function archiveEmail(token: string, id: string): Promise<void> {
   })
 }
 
-export async function starAndArchiveEmail(token: string, id: string): Promise<void> {
+export async function starEmail(token: string, id: string): Promise<void> {
   await gfetch(`/messages/${id}/modify`, token, {
     method: 'POST',
-    body: JSON.stringify({ addLabelIds: ['STARRED'], removeLabelIds: ['INBOX'] }),
+    body: JSON.stringify({ addLabelIds: ['STARRED'] }),
   })
 }
 

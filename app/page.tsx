@@ -11,7 +11,7 @@ import {
   fetchInboxEmails,
   fetchLabels,
   archiveEmail,
-  starAndArchiveEmail,
+  starEmail,
   trashEmail,
   untrashEmail,
   labelAndArchiveEmail,
@@ -158,7 +158,7 @@ export default function Home() {
           await trashEmail(token, email.id)
         } else if (direction === 'up') {
           addTodo({ id: email.id, subject: email.subject, from: email.from })
-          await starAndArchiveEmail(token, email.id)
+          await starEmail(token, email.id)
         }
       } catch (err) {
         console.error('Action failed:', err)
